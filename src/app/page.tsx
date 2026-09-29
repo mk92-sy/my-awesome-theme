@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Check, Copy, Moon, Palette, Sun, WandSparkles } from "lucide-react";
 import { isValidHex, makePalette, normalizeHex, type Shade } from "@/lib/color-utils";
 import ContrastChecker from "@/components/contrast-checker";
+import SiteHeader from "@/components/site-header";
 
 export default function Home() {
   const [base, setBase] = useState("#84CC16");
@@ -66,23 +67,7 @@ export default function Home() {
   return (
     <main className={dark ? "app dark" : "app"}>
       <div className="shell">
-        <header className="topbar">
-          <a className="brand" href="#">
-            <span className="brand-mark">
-              <Palette size={19} />
-            </span>
-            <span>MyAwesomeTheme</span>
-          </a>
-          <div className="top-actions">
-            <nav className="header-links" aria-label="Main navigation">
-              <a href="/about">About</a>
-              <a href="/privacy">Privacy</a>
-            </nav>
-            <button className="icon-button" aria-label="Toggle color theme" onClick={() => setDark(!dark)}>
-              {dark ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
-          </div>
-        </header>
+        <SiteHeader dark={dark} onToggleTheme={() => setDark(!dark)} />
 
         <section className="hero">
           <div className="eyebrow">
