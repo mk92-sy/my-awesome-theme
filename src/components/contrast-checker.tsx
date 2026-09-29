@@ -19,11 +19,23 @@ function Status({ pass, children }: { pass: boolean; children: React.ReactNode }
 
 export default function ContrastChecker({ palette }: { palette: Shade[] }) {
   const [textSize, setTextSize] = useState<"normal" | "large">("normal");
+  const [textColorMode, setTextColorMode] = useState<"best" | "black" | "white" | "custom">("best");
+  const [customHex, setCustomHex] = useState("#FFFFFF");
+  const normalizedCustomHex = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.test(customHex)
+    ? "#" + (customHex.replace("#", "").length === 3
+        ? customHex.replace("#", "").split("").map((char) => char + char).join("")
+        : customHex.replace("#", "")).toUpperCase()
+    : null;
   const results = useMemo(() => palette.map((shade) => {
     const white = contrast(shade.hex, "#FFFFFF");
     const black = contrast(shade.hex, "#000000");
-    return { ...shade, white, black, best: white >= black ? "#FFFFFF" : "#000000", ratio: Math.max(white, black) };
-  }), [palette]);
+    const best = white >= black ? "#FFFFFF" : "#000000";
+    const textColor = textColorMode === "black" ? "#000000"
+      : textColorMode === "white" ? "#FFFFFF"
+      : textColorMode === "custom" ? normalizedCustomHex ?? best
+      : best;
+    return { ...shade, best, textColor, ratio: contrast(shade.hex, textColor) };
+  }), [palette, textColorMode, normalizedCustomHex]);
   const aa = textSize === "normal" ? 4.5 : 3;
   const aaa = textSize === "normal" ? 7 : 4.5;
 
@@ -45,15 +57,15 @@ export default function ContrastChecker({ palette }: { palette: Shade[] }) {
               <button type="button" aria-pressed={textSize === "large"} className={textSize === "large" ? "contrast-size-tab active" : "contrast-size-tab"} onClick={() => setTextSize("large")}>Large text</button>
             </div>
           </div>
-          <p className="contrast-threshold">AA <b>{aa}:1</b><span /> AAA <b>{aaa}:1</b></p>
+          <div className="contrast-threshold">AA <b>{aa}:1</b><span /> AAA <b>{aaa}:1</b></div>
         </div>
         <div className="contrast-list">
           {results.map((shade) => (
             <div className="contrast-row" key={shade.step}>
               <span className="contrast-swatch" style={{ background: shade.hex }} />
               <div className="contrast-shade"><b>{shade.step}</b><span>{shade.hex}</span></div>
-              <div className={textSize === "large" ? "contrast-preview large-text" : "contrast-preview normal-text"} style={{ background: shade.hex, color: shade.best }}>
-                <b>Aa</b><span>{shade.best === "#FFFFFF" ? "White" : "Black"} text</span>
+              <div className={textSize === "large" ? "contrast-preview large-text" : "contrast-preview normal-text"} style={{ background: shade.hex, color: shade.textColor }}>
+                <b>Aa</b><span>{shade.textColor} text</span>
               </div>
               <div className="contrast-ratio"><b>{shade.ratio.toFixed(2)}:1</b><span>Best contrast</span></div>
               <div className="contrast-badges">
@@ -63,7 +75,7 @@ export default function ContrastChecker({ palette }: { palette: Shade[] }) {
             </div>
           ))}
         </div>
-        <p className="contrast-note">Ratios are calculated against the higher-contrast of pure white and black. WCAG results shown here apply to that text color and the selected text size; always verify actual interface combinations.</p>
+        <p className="contrast-note">Contrast ratios are calculated using the selected text color against each palette shade. “Best contrast” automatically chooses black or white per shade. WCAG results apply to the selected text size; always verify actual interface combinations.</p>
       </div>
     </section>
   );
