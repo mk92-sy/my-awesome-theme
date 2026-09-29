@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Check, ChevronDown, Copy, Moon, Palette, Sun, WandSparkles } from "lucide-react";
 import { isValidHex, makePalette, normalizeHex, type Shade } from "@/lib/color-utils";
+import ContrastChecker from "@/components/contrast-checker";
 
 export default function Home() {
   const [base, setBase] = useState("#84CC16");
@@ -68,7 +69,7 @@ export default function Home() {
             <span className="brand-mark">
               <Palette size={19} />
             </span>
-            <span>ColorKit</span>
+            <span>MyAwesomeTheme</span>
           </a>
           <div className="top-actions">
             <a className="docs-link" href="#export">
@@ -163,6 +164,8 @@ export default function Home() {
           <p className="helper-text">Select any shade to copy its HEX value.</p>
         </section>
 
+        <ContrastChecker palette={palette} />
+
         <section className="workspace export-section" id="export">
           <div className="section-heading">
             <div>
@@ -239,10 +242,10 @@ export default function Home() {
             <span className="brand-mark">
               <Palette size={16} />
             </span>
-            ColorKit
+            MyAwesomeTheme
           </a>
           <span>Made for people who care about color.</span>
-          <span>© 2026 ColorKit</span>
+          <span>© 2026 MyAwesomeTheme</span>
         </footer>
       </div>
     </main>
