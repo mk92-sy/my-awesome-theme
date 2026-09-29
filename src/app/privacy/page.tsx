@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import SiteHeader from "@/components/site-header";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -10,10 +11,7 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   return (
     <main className="app"><div className="shell info-page">
-      <header className="info-page-header">
-        <Link className="brand" href="/"><span className="brand-mark" aria-hidden="true">✳</span><span>MyAwesomeTheme</span></Link>
-        <Link className="info-back-link" href="/">Back to color generator</Link>
-      </header>
+      <SiteHeader />
       <article className="info-article">
         <p className="info-eyebrow">LEGAL</p><h1>Privacy Policy</h1><p className="info-muted">Last updated: September 29, 2026</p>
         <p className="info-lead">This page describes how MyAwesomeTheme handles information when you visit and use the website. Review and update it to reflect the actual hosting, analytics, advertising, and contact services configured for your deployment before publishing it as a final legal policy.</p>
