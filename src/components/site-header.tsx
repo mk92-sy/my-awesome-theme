@@ -54,7 +54,7 @@ export default function SiteHeader({ dark: darkProp, onToggleTheme }: { dark?: b
               <Link href="/privacy" className={pathname === "/privacy" ? "active" : undefined} aria-current={pathname === "/privacy" ? "page" : undefined}>{t.privacy}</Link>
             </nav>
             <label className="locale-select-wrap">
-              <select className="locale-select" aria-label="Language" value={locale} onChange={(e) => { const next = e.target.value as Locale; setLocale(next); document.documentElement.lang = next; document.documentElement.dataset.locale = next; window.localStorage.setItem("mat-locale", next); }}>
+              <select className="locale-select" aria-label="Language" value={locale} onChange={(e) => { const next = e.target.value as Locale; setLocale(next); document.documentElement.lang = next; document.documentElement.dataset.locale = next; window.localStorage.setItem("mat-locale", next); window.dispatchEvent(new CustomEvent("mat-locale-change", { detail: next })); }}>
                 <option value="ko">KO</option>
                 <option value="en">EN</option>
               </select>
