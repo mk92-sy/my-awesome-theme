@@ -11,7 +11,9 @@ export default function Home() {
   const [format, setFormat] = useState<"v4" | "v3" | "css">("v4");
   const [dark, setDark] = useState(false);
   const [copied, setCopied] = useState("");
+  const [previewButtonStep, setPreviewButtonStep] = useState<number>(500);
   const palette = useMemo(() => makePalette(base), [base]);
+  const previewButtonShade = palette.find((shade) => shade.step === previewButtonStep) ?? palette[5] ?? palette[0];
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -202,6 +204,28 @@ export default function Home() {
             </div>
             <span className="subtle">A little design-system magic</span>
           </div>
+          <div className="preview-button-color-control">
+            <div className="preview-button-color-heading">
+              <strong>Button color</strong>
+              <span>Choose a shade from your generated palette to apply to the preview button.</span>
+            </div>
+            <div className="preview-button-shades" role="group" aria-label="Preview button color">
+              {palette.map((shade) => (
+                <button
+                  key={shade.step}
+                  type="button"
+                  className={previewButtonShade.step === shade.step ? "preview-button-shade active" : "preview-button-shade"}
+                  aria-label={`Use shade ${shade.step}, ${shade.hex} for the preview button`}
+                  aria-pressed={previewButtonShade.step === shade.step}
+                  title={`${shade.step} · ${shade.hex}`}
+                  onClick={() => setPreviewButtonStep(shade.step)}
+                >
+                  <span style={{ background: shade.hex }} />
+                  <b>{shade.step}</b>
+                </button>
+              ))}
+            </div>
+          </div>
           <div className="preview-card">
             <div className="preview-top">
               <div>
@@ -219,8 +243,8 @@ export default function Home() {
               <button
                 className="preview-cta"
                 style={{
-                  background: palette[5].hex,
-                  color: (palette.find((shade) => shade.isAnchor) ?? palette[5]).text,
+                  background: previewButtonShade.hex,
+                  color: previewButtonShade.text,
                 }}
               >
                 Get started <span>→</span>
