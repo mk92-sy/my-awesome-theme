@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Check, ChevronDown, Copy, Moon, Palette, Sun, WandSparkles } from "lucide-react";
+import { Check, Copy, Moon, Palette, Sun, WandSparkles } from "lucide-react";
 import { isValidHex, makePalette, normalizeHex, type Shade } from "@/lib/color-utils";
 import ContrastChecker from "@/components/contrast-checker";
 
@@ -74,9 +74,6 @@ export default function Home() {
             <span>MyAwesomeTheme</span>
           </a>
           <div className="top-actions">
-            <a className="docs-link" href="#export">
-              Docs <ChevronDown size={14} />
-            </a>
             <button className="icon-button" aria-label="Toggle color theme" onClick={() => setDark(!dark)}>
               {dark ? <Sun size={18} /> : <Moon size={18} />}
             </button>
@@ -269,7 +266,11 @@ export default function Home() {
             MyAwesomeTheme
           </a>
           <span>Made for people who care about color.</span>
-          <span>© 2026 MyAwesomeTheme</span>
+          <nav className="footer-links" aria-label="Footer navigation">
+            <a href="/about">About</a>
+            <a href="/privacy">Privacy</a>
+          </nav>
+          <span>© {new Date().getFullYear()} MyAwesomeTheme</span>
         </footer>
       </div>
     </main>
