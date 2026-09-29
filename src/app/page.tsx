@@ -11,12 +11,19 @@ export default function Home() {
   const [input, setInput] = useState("#84CC16");
   const [format, setFormat] = useState<"v4" | "v3" | "css">("v4");
   const [dark, setDark] = useState(false);
+  const [locale, setLocale] = useState<"ko" | "en">("ko");
+  const ko = locale === "ko";
   const [copied, setCopied] = useState("");
   const [previewButtonStep, setPreviewButtonStep] = useState<number>(500);
   const palette = useMemo(() => makePalette(base), [base]);
   const previewButtonShade = palette.find((shade) => shade.step === previewButtonStep) ?? palette[5] ?? palette[0];
 
   useEffect(() => {
+    const savedLocale = window.localStorage.getItem("mat-locale");
+    const initialLocale = savedLocale === "en" ? "en" : "ko";
+    setLocale(initialLocale);
+    const onLocaleChange = (event: Event) => setLocale((event as CustomEvent<"ko" | "en">).detail);
+    window.addEventListener("mat-locale-change", onLocaleChange);
     const savedTheme = window.localStorage.getItem("mat-theme") === "dark";
     setDark(savedTheme);
 
@@ -28,6 +35,7 @@ export default function Home() {
       setBase(normalized);
       setInput(normalized);
     }
+    return () => window.removeEventListener("mat-locale-change", onLocaleChange);
   }, []);
 
   const code = useMemo(() => {
@@ -74,16 +82,16 @@ export default function Home() {
 
         <section className="hero">
           <div className="eyebrow">
-            <WandSparkles size={13} /> COLOR SYSTEM GENERATOR
+            <WandSparkles size={13} /> {ko ? "컬러 시스템 생성기" : "COLOR SYSTEM GENERATOR"}
           </div>
           <h1>
-            Build your color system<span>.</span>
+            {ko ? <>나만의 컬러 시스템을<span>.</span></> : <>Build your color system<span>.</span></>}
           </h1>
-          <p>One color. A complete design system.</p>
-          <div className="hero-highlights" aria-label="What you can do">
-            <span><i /> 50–950 color scale</span>
-            <span><i /> WCAG contrast checks</span>
-            <span><i /> Tailwind &amp; CSS exports</span>
+          <p>{ko ? "하나의 컬러로 완성하는 디자인 시스템." : "One color. A complete design system."}</p>
+          <div className="hero-highlights" aria-label={ko ? "주요 기능" : "What you can do"}>
+            <span><i /> {ko ? "50–950 컬러 스케일" : "50–950 color scale"}</span>
+            <span><i /> {ko ? "WCAG 명도 대비 검사" : "WCAG contrast checks"}</span>
+            <span><i /> {ko ? "Tailwind 및 CSS 내보내기" : "Tailwind & CSS exports"}</span>
           </div>
         </section>
 
@@ -91,13 +99,13 @@ export default function Home() {
           <div className="section-heading">
             <div>
               <span className="step-label">01</span>
-              <h2>Choose your color</h2>
+              <h2>{ko ? "컬러 선택" : "Choose your color"}</h2>
             </div>
-            <span className="subtle">Start with any color</span>
+            <span className="subtle">{ko ? "원하는 컬러에서 시작하세요" : "Start with any color"}</span>
           </div>
           <div className="color-input-card">
             <div className="color-input-left">
-              <label className="color-picker-wrap" aria-label="Choose base color">
+              <label className="color-picker-wrap" aria-label={ko ? "기준 컬러 선택" : "Choose base color"}>
                 <input
                   type="color"
                   value={isValidHex(input) ? normalizeHex(input) : base}
@@ -121,7 +129,7 @@ export default function Home() {
               </div>
             </div>
             <button className="primary-button" onClick={generate}>
-              Generate palette <WandSparkles size={16} />
+              {ko ? "팔레트 생성" : "Generate palette"} <WandSparkles size={16} />
             </button>
           </div>
         </section>
@@ -130,13 +138,13 @@ export default function Home() {
           <div className="section-heading">
             <div>
               <span className="step-label">02</span>
-              <h2>Your palette</h2>
+              <h2>{ko ? "컬러 팔레트" : "Your palette"}</h2>
             </div>
             <button
               className="text-button"
               onClick={() => copy(palette.map((s) => `${s.step}  ${s.hex}`).join("\n"), "all")}
             >
-              {copied === "all" ? <Check size={15} /> : <Copy size={15} />} Copy all
+              {copied === "all" ? <Check size={15} /> : <Copy size={15} />} {ko ? "전체 복사" : "Copy all"}
             </button>
           </div>
           <div className="palette-grid">
@@ -151,24 +159,24 @@ export default function Home() {
                   {copied === String(shade.step) ? <Check size={17} /> : <Copy size={15} />}
                 </span>
                 <span className="swatch-meta">
-                  <b>{shade.step}{shade.isAnchor ? " · Selected" : ""}</b>
+                  <b>{shade.step}{shade.isAnchor ? (ko ? " · 선택됨" : " · Selected") : ""}</b>
                   <span>{shade.hex}</span>
                 </span>
               </button>
             ))}
           </div>
-          <p className="helper-text">Your selected color is automatically placed at the closest shade level and marked “Selected”. Click any shade to copy its HEX value.</p>
+          <p className="helper-text">{ko ? "선택한 컬러와 가장 가까운 단계에 자동으로 배치하고 ‘선택됨’으로 표시합니다. 컬러를 클릭하면 HEX 값이 복사됩니다." : "Your selected color is automatically placed at the closest shade level and marked “Selected”. Click any shade to copy its HEX value."}</p>
         </section>
 
-        <section id="contrast-checker" className="workspace"><ContrastChecker palette={palette} /></section>
+        <section id="contrast-checker" className="workspace"><ContrastChecker palette={palette} locale={locale} /></section>
 
         <section className="workspace export-section" id="export">
           <div className="section-heading">
             <div>
-              <span className="step-label">03</span>
-              <h2>Export your colors</h2>
+              <span className="step-label">05</span>
+              <h2>{ko ? "컬러 내보내기" : "Export your colors"}</h2>
             </div>
-            <span className="subtle">Ready for your project</span>
+            <span className="subtle">{ko ? "프로젝트에 바로 적용하세요" : "Ready for your project"}</span>
           </div>
           <div className="export-card">
             <div className="export-toolbar">
@@ -194,16 +202,16 @@ export default function Home() {
           <div className="section-heading">
             <div>
               <span className="step-label">04</span>
-              <h2>Preview in context</h2>
+              <h2>{ko ? "실제 화면에서 미리보기" : "Preview in context"}</h2>
             </div>
-            <span className="subtle">A little design-system magic</span>
+            <span className="subtle">{ko ? "디자인 시스템의 마법을 경험하세요" : "A little design-system magic"}</span>
           </div>
           <div className="preview-button-color-control">
             <div className="preview-button-color-heading">
-              <strong>Button color</strong>
-              <span>Choose a shade from your generated palette to apply to the preview button.</span>
+              <strong>{ko ? "버튼 컬러" : "Button color"}</strong>
+              <span>{ko ? "생성한 팔레트에서 컬러를 선택해 미리보기 버튼에 적용하세요." : "Choose a shade from your generated palette to apply to the preview button."}</span>
             </div>
-            <div className="preview-button-shades" role="group" aria-label="Preview button color">
+            <div className="preview-button-shades" role="group" aria-label={ko ? "미리보기 버튼 컬러" : "Preview button color"}>
               {palette.map((shade) => (
                 <button
                   key={shade.step}
@@ -224,15 +232,15 @@ export default function Home() {
             <div className="preview-top">
               <div>
                 <span className="preview-dot" style={{ background: (palette.find((shade) => shade.isAnchor) ?? palette[5]).hex }} />
-                <b>Example component</b>
+                <b>{ko ? "컴포넌트 예시" : "Example component"}</b>
               </div>
-              <span className="preview-tag">LIVE PREVIEW</span>
+              <span className="preview-tag">{ko ? "실시간 미리보기" : "LIVE PREVIEW"}</span>
             </div>
             <div className="preview-content">
               <div>
-                <span className="preview-kicker">WELCOME BACK</span>
-                <h3>Design with confidence.</h3>
-                <p>Your palette, applied to real interface elements.</p>
+                <span className="preview-kicker">{ko ? "다시 오신 것을 환영합니다" : "WELCOME BACK"}</span>
+                <h3>{ko ? "확신을 가지고 디자인하세요." : "Design with confidence."}</h3>
+                <p>{ko ? "실제 인터페이스 요소에 팔레트를 적용했습니다." : "Your palette, applied to real interface elements."}</p>
               </div>
               <button
                 className="preview-cta"
@@ -241,15 +249,15 @@ export default function Home() {
                   color: previewButtonShade.text,
                 }}
               >
-                Get started <span>→</span>
+                {ko ? "시작하기" : "Get started"} <span>→</span>
               </button>
             </div>
             <div className="preview-bottom">
               <span>
-                <i style={{ background: palette[2].hex }} /> Accessible color tokens
+                <i style={{ background: palette[2].hex }} /> {ko ? "접근성을 고려한 컬러 토큰" : "Accessible color tokens"}
               </span>
               <span>
-                <i style={{ background: palette[7].hex }} /> Consistent across your UI
+                <i style={{ background: palette[7].hex }} /> {ko ? "일관된 UI 경험" : "Consistent across your UI"}
               </span>
             </div>
           </div>
@@ -262,10 +270,10 @@ export default function Home() {
             </span>
             MyAwesomeTheme
           </a>
-          <span>Made for people who care about color.</span>
+          <span>{ko ? "컬러를 중요하게 생각하는 사람들을 위해." : "Made for people who care about color."}</span>
           <nav className="footer-links" aria-label="Footer navigation">
-            <a href="/about">About</a>
-            <a href="/privacy">Privacy</a>
+            <a href="/about">{ko ? "소개" : "About"}</a>
+            <a href="/privacy">{ko ? "개인정보" : "Privacy"}</a>
           </nav>
           <span>© {new Date().getFullYear()} MyAwesomeTheme</span>
         </footer>
