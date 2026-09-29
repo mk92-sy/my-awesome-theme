@@ -59,6 +59,55 @@ export default function ContrastChecker({ palette }: { palette: Shade[] }) {
           </div>
           <div className="contrast-threshold">AA <b>{aa}:1</b><span /> AAA <b>{aaa}:1</b></div>
         </div>
+        <div className="contrast-color-controls">
+          <div className="contrast-color-heading">
+            <strong>Text color</strong>
+            <span>Choose the foreground color to test against every palette shade.</span>
+          </div>
+          <div className="contrast-color-options" role="group" aria-label="Text color mode">
+            {([
+              ["best", "Best contrast"],
+              ["black", "Black"],
+              ["white", "White"],
+              ["custom", "Custom HEX"],
+            ] as const).map(([mode, label]) => (
+              <button
+                key={mode}
+                type="button"
+                className={textColorMode === mode ? "contrast-color-option active" : "contrast-color-option"}
+                aria-pressed={textColorMode === mode}
+                onClick={() => setTextColorMode(mode)}
+              >
+                {mode === "black" && <i className="color-choice-dot black" />}
+                {mode === "white" && <i className="color-choice-dot white" />}
+                {label}
+              </button>
+            ))}
+          </div>
+          {textColorMode === "custom" && (
+            <div className="contrast-custom-input">
+              <label htmlFor="contrast-custom-hex">Custom text HEX</label>
+              <div className="contrast-hex-entry">
+                <input
+                  type="color"
+                  aria-label="Pick custom text color"
+                  value={normalizedCustomHex ?? "#FFFFFF"}
+                  onChange={(event) => setCustomHex(event.target.value.toUpperCase())}
+                />
+                <input
+                  id="contrast-custom-hex"
+                  type="text"
+                  value={customHex}
+                  placeholder="#FFFFFF"
+                  aria-invalid={!normalizedCustomHex}
+                  onChange={(event) => setCustomHex(event.target.value)}
+                  spellCheck={false}
+                />
+              </div>
+              {!normalizedCustomHex && <span className="contrast-input-error">Enter a valid 3- or 6-digit HEX color.</span>}
+            </div>
+          )}
+        </div>
         <div className="contrast-list">
           {results.map((shade) => (
             <div className="contrast-row" key={shade.step}>
@@ -67,7 +116,7 @@ export default function ContrastChecker({ palette }: { palette: Shade[] }) {
               <div className={textSize === "large" ? "contrast-preview large-text" : "contrast-preview normal-text"} style={{ background: shade.hex, color: shade.textColor }}>
                 <b>Aa</b><span>{shade.textColor} text</span>
               </div>
-              <div className="contrast-ratio"><b>{shade.ratio.toFixed(2)}:1</b><span>Best contrast</span></div>
+              <div className="contrast-ratio"><b>{shade.ratio.toFixed(2)}:1</b><span>{textColorMode === "best" ? "Best contrast" : "Text contrast"}</span></div>
               <div className="contrast-badges">
                 <Status pass={shade.ratio >= aa}>AA</Status>
                 <Status pass={shade.ratio >= aaa}>AAA</Status>
@@ -75,7 +124,7 @@ export default function ContrastChecker({ palette }: { palette: Shade[] }) {
             </div>
           ))}
         </div>
-        <p className="contrast-note">Contrast ratios are calculated using the selected text color against each palette shade. “Best contrast” automatically chooses black or white per shade. WCAG results apply to the selected text size; always verify actual interface combinations.</p>
+        <p className="contrast-note">Contrast ratios are calculated using the selected text color against each palette shade. “Best contrast” automatically chooses black or white per shade; Black, White, and Custom HEX apply the selected foreground color to all rows. WCAG results apply to the selected text size; always verify actual interface combinations.</p>
       </div>
     </section>
   );
