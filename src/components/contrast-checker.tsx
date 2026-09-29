@@ -35,18 +35,24 @@ export default function ContrastChecker({ palette }: { palette: Shade[] }) {
       </div>
       <div className="contrast-card">
         <div className="contrast-toolbar">
-          <div><strong>Text size</strong><div className="tabs">
-            <button className={textSize === "normal" ? "tab active" : "tab"} onClick={() => setTextSize("normal")}>Normal text</button>
-            <button className={textSize === "large" ? "tab active" : "tab"} onClick={() => setTextSize("large")}>Large text</button>
-          </div></div>
-          <p>AA {aa}:1 · AAA {aaa}:1</p>
+          <div className="contrast-controls">
+            <div className="contrast-control-heading">
+              <strong>Text size</strong>
+              <span>Choose the text size to check</span>
+            </div>
+            <div className="contrast-size-tabs" role="group" aria-label="Text size">
+              <button type="button" aria-pressed={textSize === "normal"} className={textSize === "normal" ? "contrast-size-tab active" : "contrast-size-tab"} onClick={() => setTextSize("normal")}>Normal text</button>
+              <button type="button" aria-pressed={textSize === "large"} className={textSize === "large" ? "contrast-size-tab active" : "contrast-size-tab"} onClick={() => setTextSize("large")}>Large text</button>
+            </div>
+          </div>
+          <p className="contrast-threshold">AA <b>{aa}:1</b><span /> AAA <b>{aaa}:1</b></p>
         </div>
         <div className="contrast-list">
           {results.map((shade) => (
             <div className="contrast-row" key={shade.step}>
               <span className="contrast-swatch" style={{ background: shade.hex }} />
               <div className="contrast-shade"><b>{shade.step}</b><span>{shade.hex}</span></div>
-              <div className="contrast-preview" style={{ background: shade.hex, color: shade.best }}>
+              <div className={textSize === "large" ? "contrast-preview large-text" : "contrast-preview normal-text"} style={{ background: shade.hex, color: shade.best }}>
                 <b>Aa</b><span>{shade.best === "#FFFFFF" ? "White" : "Black"} text</span>
               </div>
               <div className="contrast-ratio"><b>{shade.ratio.toFixed(2)}:1</b><span>Best contrast</span></div>
