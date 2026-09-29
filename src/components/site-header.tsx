@@ -25,11 +25,6 @@ export default function SiteHeader({ dark: darkProp, onToggleTheme }: { dark?: b
     document.documentElement.dataset.theme = savedTheme ? "dark" : "light";
   }, []);
 
-  useEffect(() => {
-    document.documentElement.lang = locale;
-    document.documentElement.dataset.locale = locale;
-    window.localStorage.setItem("mat-locale", locale);
-  }, [locale]);
 
   const toggleTheme = () => {
     const next = !(darkProp ?? dark);
@@ -53,7 +48,7 @@ export default function SiteHeader({ dark: darkProp, onToggleTheme }: { dark?: b
           <Link href="/privacy">{t.privacy}</Link>
         </nav>
         <label className="locale-select-wrap">
-          <select className="locale-select" aria-label="Language" value={locale} onChange={(e) => setLocale(e.target.value as Locale)}>
+          <select className="locale-select" aria-label="Language" value={locale} onChange={(e) => { const next = e.target.value as Locale; setLocale(next); document.documentElement.lang = next; document.documentElement.dataset.locale = next; window.localStorage.setItem("mat-locale", next); }}>
             <option value="ko">KO</option>
             <option value="en">EN</option>
           </select>
