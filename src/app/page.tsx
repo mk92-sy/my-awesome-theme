@@ -19,11 +19,11 @@ export default function Home() {
         ? previewCustomHex.replace("#", "").split("").map((char) => char + char).join("")
         : previewCustomHex.replace("#", "")).toUpperCase()
     : "#FFFFFF";
+  const palette = useMemo(() => makePalette(base), [base]);
   const previewTextColor = previewTextMode === "black" ? "#000000"
     : previewTextMode === "white" ? "#FFFFFF"
     : previewTextMode === "custom" ? normalizedPreviewCustom
     : (palette.find((shade) => shade.isAnchor) ?? palette[5]).text;
-  const palette = useMemo(() => makePalette(base), [base]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
