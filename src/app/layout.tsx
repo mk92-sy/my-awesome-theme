@@ -60,7 +60,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem("mat-theme")==="dark"?"dark":"light";var l=localStorage.getItem("mat-locale")==="en"?"en":"ko";document.documentElement.dataset.theme=t;document.documentElement.dataset.locale=l;document.documentElement.lang=l;}catch(e){}})();` }} />
       </head>
