@@ -155,13 +155,13 @@ export default function Home() {
                   {copied === String(shade.step) ? <Check size={17} /> : <Copy size={15} />}
                 </span>
                 <span className="swatch-meta">
-                  <b>{shade.step}</b>
+                  <b>{shade.step}{shade.isAnchor ? " · Selected" : ""}</b>
                   <span>{shade.hex}</span>
                 </span>
               </button>
             ))}
           </div>
-          <p className="helper-text">Select any shade to copy its HEX value.</p>
+          <p className="helper-text">Your selected color is automatically placed at the closest shade level and marked “Selected”. Click any shade to copy its HEX value.</p>
         </section>
 
         <ContrastChecker palette={palette} />
@@ -205,7 +205,7 @@ export default function Home() {
           <div className="preview-card">
             <div className="preview-top">
               <div>
-                <span className="preview-dot" style={{ background: palette[5].hex }} />
+                <span className="preview-dot" style={{ background: (palette.find((shade) => shade.isAnchor) ?? palette[5]).hex }} />
                 <b>Example component</b>
               </div>
               <span className="preview-tag">LIVE PREVIEW</span>
@@ -220,7 +220,7 @@ export default function Home() {
                 className="preview-cta"
                 style={{
                   background: palette[5].hex,
-                  color: palette[5].text,
+                  color: (palette.find((shade) => shade.isAnchor) ?? palette[5]).text,
                 }}
               >
                 Get started <span>→</span>
