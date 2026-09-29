@@ -11,19 +11,7 @@ export default function Home() {
   const [format, setFormat] = useState<"v4" | "v3" | "css">("v4");
   const [dark, setDark] = useState(false);
   const [copied, setCopied] = useState("");
-  const [previewTextMode, setPreviewTextMode] = useState<"auto" | "black" | "white" | "custom">("auto");
-  const [previewCustomHex, setPreviewCustomHex] = useState("#FFFFFF");
-  const validPreviewCustom = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.test(previewCustomHex);
-  const normalizedPreviewCustom = validPreviewCustom
-    ? "#" + (previewCustomHex.replace("#", "").length === 3
-        ? previewCustomHex.replace("#", "").split("").map((char) => char + char).join("")
-        : previewCustomHex.replace("#", "")).toUpperCase()
-    : "#FFFFFF";
   const palette = useMemo(() => makePalette(base), [base]);
-  const previewTextColor = previewTextMode === "black" ? "#000000"
-    : previewTextMode === "white" ? "#FFFFFF"
-    : previewTextMode === "custom" ? normalizedPreviewCustom
-    : (palette.find((shade) => shade.isAnchor) ?? palette[5]).text;
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -214,55 +202,6 @@ export default function Home() {
             </div>
             <span className="subtle">A little design-system magic</span>
           </div>
-          <div className="preview-text-settings">
-            <div className="preview-text-settings-copy">
-              <strong>Preview text color</strong>
-              <span>Change the text color used in the live interface preview.</span>
-            </div>
-            <div className="preview-text-options" role="group" aria-label="Preview text color">
-              {([
-                ["auto", "Auto contrast"],
-                ["black", "Black"],
-                ["white", "White"],
-                ["custom", "Custom HEX"],
-              ] as const).map(([mode, label]) => (
-                <button
-                  key={mode}
-                  type="button"
-                  className={previewTextMode === mode ? "preview-text-option active" : "preview-text-option"}
-                  aria-pressed={previewTextMode === mode}
-                  onClick={() => setPreviewTextMode(mode)}
-                >
-                  {mode === "black" && <i className="preview-color-dot black" />}
-                  {mode === "white" && <i className="preview-color-dot white" />}
-                  {label}
-                </button>
-              ))}
-            </div>
-            {previewTextMode === "custom" && (
-              <div className="preview-custom-hex">
-                <label htmlFor="preview-text-hex">Text HEX</label>
-                <div>
-                  <input
-                    aria-label="Pick preview text color"
-                    type="color"
-                    value={normalizedPreviewCustom}
-                    onChange={(e) => setPreviewCustomHex(e.target.value.toUpperCase())}
-                  />
-                  <input
-                    id="preview-text-hex"
-                    type="text"
-                    value={previewCustomHex}
-                    aria-invalid={!validPreviewCustom}
-                    onChange={(e) => setPreviewCustomHex(e.target.value)}
-                    spellCheck={false}
-                    placeholder="#FFFFFF"
-                  />
-                </div>
-                {!validPreviewCustom && <small>Enter a valid 3- or 6-digit HEX color.</small>}
-              </div>
-            )}
-          </div>
           <div className="preview-card">
             <div className="preview-top">
               <div>
@@ -273,15 +212,15 @@ export default function Home() {
             </div>
             <div className="preview-content">
               <div>
-                <span className="preview-kicker" style={{ color: previewTextColor }}>WELCOME BACK</span>
-                <h3 style={{ color: previewTextColor }}>Design with confidence.</h3>
-                <p style={{ color: previewTextColor }}>Your palette, applied to real interface elements.</p>
+                <span className="preview-kicker">WELCOME BACK</span>
+                <h3>Design with confidence.</h3>
+                <p>Your palette, applied to real interface elements.</p>
               </div>
               <button
                 className="preview-cta"
                 style={{
                   background: palette[5].hex,
-                  color: previewTextColor,
+                  color: (palette.find((shade) => shade.isAnchor) ?? palette[5]).text,
                 }}
               >
                 Get started <span>→</span>
