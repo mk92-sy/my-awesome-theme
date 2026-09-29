@@ -13,6 +13,7 @@ const messages = {
 export default function SiteHeader({ dark: darkProp, onToggleTheme }: { dark?: boolean; onToggleTheme?: () => void }) {
   const [locale, setLocale] = useState<Locale>("ko");
   const [dark, setDark] = useState(false);
+  const [settingsReady, setSettingsReady] = useState(false);
 
   useEffect(() => {
     const savedLocale = window.localStorage.getItem("mat-locale");
@@ -23,6 +24,7 @@ export default function SiteHeader({ dark: darkProp, onToggleTheme }: { dark?: b
     setDark(savedTheme);
     document.querySelectorAll<HTMLElement>(".app").forEach((el) => el.classList.toggle("dark", savedTheme));
     document.documentElement.dataset.theme = savedTheme ? "dark" : "light";
+    setSettingsReady(true);
   }, []);
 
 
@@ -43,19 +45,30 @@ export default function SiteHeader({ dark: darkProp, onToggleTheme }: { dark?: b
         <span>MyAwesomeTheme</span>
       </Link>
       <div className="top-actions">
-        <nav className="header-links" aria-label="Main navigation">
-          <Link href="/about">{t.about}</Link>
-          <Link href="/privacy">{t.privacy}</Link>
-        </nav>
-        <label className="locale-select-wrap">
-          <select className="locale-select" aria-label="Language" value={locale} onChange={(e) => { const next = e.target.value as Locale; setLocale(next); document.documentElement.lang = next; document.documentElement.dataset.locale = next; window.localStorage.setItem("mat-locale", next); }}>
-            <option value="ko">KO</option>
-            <option value="en">EN</option>
-          </select>
-        </label>
-        <button className="icon-button" aria-label={t.theme} onClick={toggleTheme}>
-          {(darkProp ?? dark) ? <Sun size={18} /> : <Moon size={18} />}
-        </button>
+        {settingsReady ? (
+          <>
+            <nav className="header-links" aria-label="Main navigation">
+              <Link href="/about">{t.about}</Link>
+              <Link href="/privacy">{t.privacy}</Link>
+            </nav>
+            <label className="locale-select-wrap">
+              <select className="locale-select" aria-label="Language" value={locale} onChange={(e) => { const next = e.target.value as Locale; setLocale(next); document.documentElement.lang = next; document.documentElement.dataset.locale = next; window.localStorage.setItem("mat-locale", next); }}>
+                <option value="ko">KO</option>
+                <option value="en">EN</option>
+              </select>
+            </label>
+            <button className="icon-button" aria-label={t.theme} onClick={toggleTheme}>
+              {(darkProp ?? dark) ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+          </>
+        ) : (
+          <div className="header-settings-skeleton" aria-hidden="true">
+            <span className="header-skeleton-nav" />
+            <span className="header-skeleton-nav" />
+            <span className="header-skeleton-locale" />
+            <span className="header-skeleton-theme" />
+          </div>
+        )}
       </div>
     </header>
   );
