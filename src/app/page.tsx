@@ -128,7 +128,7 @@ export default function Home() {
                 />
               </div>
             </div>
-            <button className="primary-button" onClick={generate}>
+            <button type="button" className="primary-button" onClick={generate} disabled={!isValidHex(input)} aria-label={ko ? "입력한 HEX 컬러로 팔레트 생성" : "Generate a palette from the entered HEX color"}>
               {ko ? "팔레트 생성" : "Generate palette"} <WandSparkles size={16} />
             </button>
           </div>
@@ -150,6 +150,7 @@ export default function Home() {
           <div className="palette-grid">
             {palette.map((shade: Shade) => (
               <button
+                type="button"
                 key={shade.step}
                 className="swatch"
                 onClick={() => copy(shade.hex, String(shade.step))}
@@ -182,12 +183,12 @@ export default function Home() {
             <div className="export-toolbar">
               <div className="tabs">
                 {(["v4", "v3", "css"] as const).map((f) => (
-                  <button key={f} className={format === f ? "tab active" : "tab"} onClick={() => setFormat(f)}>
+                  <button type="button" key={f} className={format === f ? "tab active" : "tab"} aria-pressed={format === f} onClick={() => setFormat(f)}>
                     {f === "v4" ? "Tailwind v4" : f === "v3" ? "Tailwind v3" : "CSS"}
                   </button>
                 ))}
               </div>
-              <button className="copy-code" onClick={() => copy(code, "code")}>
+              <button type="button" className="copy-code" onClick={() => copy(code, "code")}>
                 {copied === "code" ? <Check size={15} /> : <Copy size={15} />}{" "}
                 {copied === "code" ? "Copied" : "Copy code"}
               </button>
