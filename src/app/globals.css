@@ -548,3 +548,15 @@ footer {
     transition-duration: 0.01ms !important;
   }
 }
+
+
+.contrast-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow-card);overflow:hidden}
+.contrast-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 20px;border-bottom:1px solid var(--line)}
+.contrast-toolbar>div{display:flex;align-items:center;gap:14px}.contrast-toolbar strong,.contrast-toolbar p{font-size:14px;margin:0;color:var(--muted)}.contrast-list{padding:6px 20px}
+.contrast-row{display:grid;grid-template-columns:28px 100px minmax(130px,1fr) 105px 100px;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}.contrast-row:last-child{border-bottom:0}
+.contrast-swatch{width:28px;height:34px;border-radius:8px;border:1px solid var(--line)}.contrast-shade,.contrast-ratio{display:flex;flex-direction:column;gap:4px}.contrast-shade b,.contrast-ratio b{font-size:14px}.contrast-shade span,.contrast-ratio span{font-size:14px;color:var(--muted)}
+.contrast-preview{display:flex;align-items:center;gap:12px;border-radius:9px;padding:9px 12px;min-height:44px}.contrast-preview b{font-size:19px}.contrast-preview span{font-size:14px;font-weight:600}
+.contrast-badges{display:flex;gap:6px}.contrast-status{display:inline-flex;align-items:center;gap:3px;padding:5px 7px;border-radius:7px;font-size:14px;font-weight:700}.contrast-status.pass{background:#ecfccb;color:#365314}.contrast-status.fail{background:#fee2e2;color:#991b1b}
+.contrast-note{font-size:14px;line-height:1.6;color:var(--muted);padding:0 20px 18px;margin:0}
+.app.dark .contrast-status.pass{background:#365314;color:#ecfccb}.app.dark .contrast-status.fail{background:#451a1a;color:#fecaca}
+@media(max-width:760px){.contrast-toolbar{align-items:flex-start;flex-direction:column}.contrast-toolbar>div{align-items:flex-start;flex-direction:column;gap:8px}.contrast-list{padding:4px 12px}.contrast-row{grid-template-columns:24px 1fr auto;gap:10px}.contrast-swatch{width:24px;height:30px}.contrast-preview{grid-column:2 / 4;grid-row:2;padding:8px 10px}.contrast-ratio{grid-column:2;grid-row:3}.contrast-badges{grid-column:3;grid-row:3;justify-content:flex-end}.contrast-shade{grid-column:2;grid-row:1}.contrast-note{padding:0 14px 16px}}
