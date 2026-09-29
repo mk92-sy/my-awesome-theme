@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Check, Copy, Moon, Palette, Sun, WandSparkles } from "lucide-react";
+import { Check, Copy, Moon, Palette, Sun, WandSparkles, Map } from "lucide-react";
 import { isValidHex, makePalette, normalizeHex, type Shade } from "@/lib/color-utils";
 import ContrastChecker from "@/components/contrast-checker";
 
@@ -74,6 +74,9 @@ export default function Home() {
             <span>MyAwesomeTheme</span>
           </a>
           <div className="top-actions">
+            <nav className="header-links" aria-label="Main navigation">
+              <a href="/sitemap"><Map size={15} /> Sitemap</a>
+            </nav>
             <button className="icon-button" aria-label="Toggle color theme" onClick={() => setDark(!dark)}>
               {dark ? <Sun size={18} /> : <Moon size={18} />}
             </button>
@@ -269,6 +272,7 @@ export default function Home() {
           <nav className="footer-links" aria-label="Footer navigation">
             <a href="/about">About</a>
             <a href="/privacy">Privacy</a>
+            <a href="/sitemap">Sitemap</a>
           </nav>
           <span>© {new Date().getFullYear()} MyAwesomeTheme</span>
         </footer>
