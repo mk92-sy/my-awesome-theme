@@ -1007,3 +1007,14 @@ button:focus-visible,a:focus-visible,input:focus-visible { outline:3px solid col
   .locale-select { min-width:51px; height:34px; padding-left:8px; padding-right:20px; font-size:12px; }
   .locale-select-wrap::after { right:8px; top:14px; }
 }
+
+
+/* Prevent theme flash before hydration: the root layout sets data-theme synchronously. */
+html[data-theme="dark"] .app {
+  --page:#111116; --surface:#19191f; --ink:#f5f4fa; --muted:#a3a1b2;
+  --line:#2c2a36; --soft:#22212b; --accent:#a78bfa; --accent-strong:#b7a1ff;
+  --accent-soft:#302746; --shadow-card:0 10px 34px rgba(0,0,0,.22);
+  --shadow-hover:0 12px 30px rgba(0,0,0,.3); --shadow-button:0 5px 18px rgba(118,85,217,.18);
+  color-scheme:dark;
+}
+.app { transition:none !important; }
