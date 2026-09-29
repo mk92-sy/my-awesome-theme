@@ -92,6 +92,11 @@ export default function Home() {
             Build your color system<span>.</span>
           </h1>
           <p>One color. A complete design system.</p>
+          <div className="hero-highlights" aria-label="What you can do">
+            <span><i /> 50–950 color scale</span>
+            <span><i /> WCAG contrast checks</span>
+            <span><i /> Tailwind &amp; CSS exports</span>
+          </div>
         </section>
 
         <section className="workspace">
