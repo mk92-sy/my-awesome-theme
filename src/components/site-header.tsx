@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Moon, Sun, Palette } from "lucide-react";
 
@@ -11,6 +12,7 @@ const messages = {
 };
 
 export default function SiteHeader({ dark: darkProp, onToggleTheme }: { dark?: boolean; onToggleTheme?: () => void }) {
+  const pathname = usePathname();
   const [locale, setLocale] = useState<Locale>("ko");
   const [dark, setDark] = useState(false);
   const [settingsReady, setSettingsReady] = useState(false);
@@ -48,8 +50,8 @@ export default function SiteHeader({ dark: darkProp, onToggleTheme }: { dark?: b
         {settingsReady ? (
           <>
             <nav className="header-links" aria-label="Main navigation">
-              <Link href="/about">{t.about}</Link>
-              <Link href="/privacy">{t.privacy}</Link>
+              <Link href="/about" className={pathname === "/about" ? "active" : undefined} aria-current={pathname === "/about" ? "page" : undefined}>{t.about}</Link>
+              <Link href="/privacy" className={pathname === "/privacy" ? "active" : undefined} aria-current={pathname === "/privacy" ? "page" : undefined}>{t.privacy}</Link>
             </nav>
             <label className="locale-select-wrap">
               <select className="locale-select" aria-label="Language" value={locale} onChange={(e) => { const next = e.target.value as Locale; setLocale(next); document.documentElement.lang = next; document.documentElement.dataset.locale = next; window.localStorage.setItem("mat-locale", next); }}>
@@ -63,8 +65,7 @@ export default function SiteHeader({ dark: darkProp, onToggleTheme }: { dark?: b
           </>
         ) : (
           <div className="header-settings-skeleton" aria-hidden="true">
-            <span className="header-skeleton-nav" />
-            <span className="header-skeleton-nav" />
+            <div className="header-skeleton-nav-group"><span className="header-skeleton-nav header-skeleton-about" /><span className="header-skeleton-nav header-skeleton-privacy" /></div>
             <span className="header-skeleton-locale" />
             <span className="header-skeleton-theme" />
           </div>
