@@ -173,7 +173,7 @@ export default function Home() {
         <section className="workspace export-section" id="export">
           <div className="section-heading">
             <div>
-              <span className="step-label">05</span>
+              <span className="step-label">04</span>
               <h2>{ko ? "컬러 내보내기" : "Export your colors"}</h2>
             </div>
             <span className="subtle">{ko ? "프로젝트에 바로 적용하세요" : "Ready for your project"}</span>
@@ -201,7 +201,7 @@ export default function Home() {
         <section className="preview-section">
           <div className="section-heading">
             <div>
-              <span className="step-label">04</span>
+              <span className="step-label">05</span>
               <h2>{ko ? "실제 화면에서 미리보기" : "Preview in context"}</h2>
             </div>
             <span className="subtle">{ko ? "디자인 시스템의 마법을 경험하세요" : "A little design-system magic"}</span>
