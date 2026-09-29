@@ -963,3 +963,8 @@ button:focus-visible,a:focus-visible,input:focus-visible { outline:3px solid col
   .icon-button { width:34px;height:34px; }
   .top-actions { gap:6px; }
 }
+
+.hero-highlights { display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:10px; margin:27px auto 0; }
+.hero-highlights span { display:inline-flex; align-items:center; gap:8px; padding:9px 13px; border:1px solid var(--line); border-radius:999px; background:var(--surface); color:var(--muted); font-size:12px; font-weight:650; box-shadow:0 2px 8px rgba(20,16,40,.025); }
+.hero-highlights i { width:6px; height:6px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+@media(max-width:760px) { .hero-highlights { gap:8px; margin-top:22px; } .hero-highlights span { font-size:11px; padding:8px 10px; } }
