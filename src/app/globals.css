@@ -760,3 +760,53 @@ footer {
   .preview-text-options { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }
   .preview-text-option { padding:9px 8px; }
 }
+
+
+/* Preview in context: select a generated palette shade for the CTA button */
+.preview-button-color-control {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:14px 22px;
+  margin:0 0 14px;
+  padding:18px 20px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:var(--surface);
+  box-shadow:var(--shadow-card);
+}
+.preview-button-color-heading { display:flex; flex-direction:column; gap:5px; margin-right:auto; }
+.preview-button-color-heading strong { color:var(--ink); font-size:15px; font-weight:800; }
+.preview-button-color-heading span { color:var(--muted); font-size:14px; }
+.preview-button-shades {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:6px;
+}
+.preview-button-shade {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:5px;
+  min-width:48px;
+  padding:5px 5px 6px;
+  border:1px solid transparent;
+  border-radius:11px;
+  background:transparent;
+  color:var(--muted);
+  cursor:pointer;
+  transition:background .15s,border-color .15s,transform .15s;
+}
+.preview-button-shade:hover { background:var(--soft); color:var(--ink); transform:translateY(-1px); }
+.preview-button-shade.active { border-color:var(--ink); background:var(--soft); color:var(--ink); box-shadow:0 0 0 2px var(--surface),0 0 0 3px var(--line); }
+.preview-button-shade>span { display:block; width:32px; height:32px; border:1px solid rgba(127,127,127,.22); border-radius:9px; }
+.preview-button-shade>b { font-size:12px; font-weight:800; line-height:1; }
+.preview-cta { transition:background-color .18s ease,color .18s ease,transform .18s ease,box-shadow .18s ease; }
+.preview-cta:hover { transform:translateY(-1px); box-shadow:0 6px 16px rgba(0,0,0,.12); }
+@media(max-width:760px) {
+  .preview-button-color-control { align-items:stretch; flex-direction:column; padding:16px; gap:12px; }
+  .preview-button-shades { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:6px; }
+  .preview-button-shade { min-width:0; }
+  .preview-button-shade>span { width:100%; max-width:38px; height:30px; }
+}
