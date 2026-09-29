@@ -2,6 +2,7 @@ export type Shade = {
   step: number;
   hex: string;
   text: string;
+  isAnchor?: boolean;
 };
 
 const STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
@@ -184,24 +185,51 @@ export function normalizeHex(value: string) {
 }
 
 export function makePalette(base: string): Shade[] {
-  const original = rgbToOklch(hexToRgb(normalizeHex(base)));
+  const normalizedBase = normalizeHex(base);
+  const original = rgbToOklch(hexToRgb(normalizedBase));
 
-  // L값은 지각적 밝기를 기준으로 조절한다.
-  // C와 h는 기본적으로 원본의 채도와 색상각을 유지한다.
-  const lightness = [0.98, 0.94, 0.88, 0.8, 0.7, original.l, 0.48, 0.4, 0.32, 0.24];
+  // 기본 명도 기준표. 입력 색의 OKLCH 명도와 가장 가까운 단계에
+  // 앵커를 자동 배치하되, 극단적인 색도 주변 색을 생성할 공간을 둔다.
+  const targetLightness = [0.98, 0.94, 0.88, 0.8, 0.7, 0.6, 0.48, 0.4, 0.32, 0.24];
+  let anchorIndex = 1;
+
+  for (let i = 1; i < targetLightness.length - 1; i++) {
+    if (
+      Math.abs(targetLightness[i] - original.l) <
+      Math.abs(targetLightness[anchorIndex] - original.l)
+    ) {
+      anchorIndex = i;
+    }
+  }
+
+  // 선택색을 앵커로 고정하고, 밝은 쪽/어두운 쪽 목표 명도를
+  // 각각 선형 보간해 자연스러운 명도 흐름을 만든다.
+  const lightness = targetLightness.map((target, index) => {
+    if (index === anchorIndex) return original.l;
+
+    if (index < anchorIndex) {
+      const start = targetLightness[0];
+      const span = anchorIndex;
+      const t = index / span;
+      return start + (original.l - start) * t;
+    }
+
+    const span = targetLightness.length - 1 - anchorIndex;
+    const t = (index - anchorIndex) / span;
+    return original.l + (targetLightness[targetLightness.length - 1] - original.l) * t;
+  });
 
   return STEPS.map((step, index) => {
-    const l = lightness[index];
-
-    // 원본색을 기준으로 채도를 점진적으로 줄여
-    // 아주 밝거나 어두운 단계의 색상 번짐을 방지한다.
-    const chromaScale = index < 5 ? 0.65 + (index / 5) * 0.35 : 1 - ((index - 5) / 5) * 0.3;
+    const chromaScale =
+      index < anchorIndex
+        ? 0.65 + (index / Math.max(anchorIndex, 1)) * 0.35
+        : 1 - ((index - anchorIndex) / Math.max(STEPS.length - 1 - anchorIndex, 1)) * 0.3;
 
     const hex =
-      index === 5
-        ? normalizeHex(base)
+      index === anchorIndex
+        ? normalizedBase
         : oklchToHex({
-            l,
+            l: lightness[index],
             c: original.c * chromaScale,
             h: original.h,
           });
@@ -212,6 +240,7 @@ export function makePalette(base: string): Shade[] {
       step,
       hex,
       text: luminance > 0.179 ? "#171717" : "#FFFFFF",
+      isAnchor: index === anchorIndex,
     };
   });
 }
