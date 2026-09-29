@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   description:
     "Create harmonious 50–950 color palettes from any HEX color. Preview colors in UI components, check WCAG contrast, and export tokens for Tailwind CSS v4, v3, and CSS variables.",
   applicationName: "MyAwesomeTheme",
+  alternates: { canonical: "/" },
   keywords: [
     "color palette generator",
     "color system",
