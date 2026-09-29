@@ -17,6 +17,9 @@ export default function Home() {
   const previewButtonShade = palette.find((shade) => shade.step === previewButtonStep) ?? palette[5] ?? palette[0];
 
   useEffect(() => {
+    const savedTheme = window.localStorage.getItem("mat-theme") === "dark";
+    setDark(savedTheme);
+
     const params = new URLSearchParams(window.location.search);
     const color = params.get("color");
 
@@ -67,7 +70,7 @@ export default function Home() {
   return (
     <main className={dark ? "app dark" : "app"}>
       <div className="shell">
-        <SiteHeader dark={dark} onToggleTheme={() => setDark(!dark)} />
+        <SiteHeader dark={dark} onToggleTheme={() => setDark((current) => !current)} />
 
         <section className="hero">
           <div className="eyebrow">
