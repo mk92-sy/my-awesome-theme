@@ -987,3 +987,23 @@ button:focus-visible,a:focus-visible,input:focus-visible { outline:3px solid col
 @media(max-width:390px) {
  .language-button { padding:0 7px; font-size:11px; }
 }
+
+
+/* Compact locale dropdown */
+.locale-select-wrap { position:relative; display:inline-flex; align-items:center; }
+.locale-select {
+  appearance:none; -webkit-appearance:none; min-width:58px; height:38px;
+  padding:0 25px 0 11px; border:1px solid var(--line); border-radius:12px;
+  background:var(--surface); color:var(--ink); font:750 13px/1 inherit;
+  cursor:pointer; text-align:center; transition:border-color .18s,background .18s;
+}
+.locale-select-wrap::after {
+  content:""; position:absolute; right:10px; top:16px; width:6px; height:6px;
+  border-right:1.5px solid currentColor; border-bottom:1.5px solid currentColor;
+  transform:rotate(45deg); pointer-events:none; color:var(--muted);
+}
+.locale-select:hover,.locale-select:focus-visible { border-color:var(--accent); outline-offset:3px; }
+@media(max-width:760px) {
+  .locale-select { min-width:51px; height:34px; padding-left:8px; padding-right:20px; font-size:12px; }
+  .locale-select-wrap::after { right:8px; top:14px; }
+}
