@@ -2,26 +2,45 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Moon, Sun, Palette, Languages } from "lucide-react";
+import { Moon, Sun, Palette } from "lucide-react";
 
 type Locale = "en" | "ko";
 const messages = {
-  en: { about: "About", privacy: "Privacy", back: "Back to color generator", theme: "Toggle color theme", language: "한국어" },
-  ko: { about: "소개", privacy: "개인정보", back: "컬러 생성기로 돌아가기", theme: "테마 전환", language: "English" },
+  en: { about: "About", privacy: "Privacy", theme: "Toggle color theme" },
+  ko: { about: "소개", privacy: "개인정보", theme: "테마 전환" },
 };
 
-export default function SiteHeader({ dark = false, onToggleTheme }: { dark?: boolean; onToggleTheme?: () => void }) {
-  const [locale, setLocale] = useState<Locale>("en");
+export default function SiteHeader({ dark: darkProp, onToggleTheme }: { dark?: boolean; onToggleTheme?: () => void }) {
+  const [locale, setLocale] = useState<Locale>("ko");
+  const [dark, setDark] = useState(false);
+
   useEffect(() => {
-    const saved = window.localStorage.getItem("mat-locale");
-    if (saved === "ko" || saved === "en") setLocale(saved);
+    const savedLocale = window.localStorage.getItem("mat-locale");
+    const initialLocale: Locale = savedLocale === "en" ? "en" : "ko";
+    setLocale(initialLocale);
+    document.documentElement.lang = initialLocale;
+    const savedTheme = window.localStorage.getItem("mat-theme") === "dark";
+    setDark(savedTheme);
+    document.querySelectorAll<HTMLElement>(".app").forEach((el) => el.classList.toggle("dark", savedTheme));
+    document.documentElement.dataset.theme = savedTheme ? "dark" : "light";
   }, []);
+
   useEffect(() => {
     document.documentElement.lang = locale;
     document.documentElement.dataset.locale = locale;
     window.localStorage.setItem("mat-locale", locale);
   }, [locale]);
+
+  const toggleTheme = () => {
+    const next = !(darkProp ?? dark);
+    setDark(next);
+    window.localStorage.setItem("mat-theme", next ? "dark" : "light");
+    document.documentElement.dataset.theme = next ? "dark" : "light";
+    document.querySelectorAll<HTMLElement>(".app").forEach((el) => el.classList.toggle("dark", next));
+    onToggleTheme?.();
+  };
   const t = messages[locale];
+
   return (
     <header className="topbar site-header">
       <Link className="brand" href="/" aria-label="MyAwesomeTheme home">
@@ -33,10 +52,15 @@ export default function SiteHeader({ dark = false, onToggleTheme }: { dark?: boo
           <Link href="/about">{t.about}</Link>
           <Link href="/privacy">{t.privacy}</Link>
         </nav>
-        <button className="language-button" onClick={() => setLocale(locale === "en" ? "ko" : "en")} aria-label="Switch language">
-          <Languages size={16} /> {t.language}
+        <label className="locale-select-wrap">
+          <select className="locale-select" aria-label="Language" value={locale} onChange={(e) => setLocale(e.target.value as Locale)}>
+            <option value="ko">KO</option>
+            <option value="en">EN</option>
+          </select>
+        </label>
+        <button className="icon-button" aria-label={t.theme} onClick={toggleTheme}>
+          {(darkProp ?? dark) ? <Sun size={18} /> : <Moon size={18} />}
         </button>
-        {onToggleTheme && <button className="icon-button" aria-label={t.theme} onClick={onToggleTheme}>{dark ? <Sun size={18} /> : <Moon size={18} />}</button>}
       </div>
     </header>
   );
