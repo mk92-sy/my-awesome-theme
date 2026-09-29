@@ -111,7 +111,7 @@ export default function Home() {
                     setInput(e.target.value.toUpperCase());
                   }}
                 />
-                <span style={{ background: base }} />
+                <span style={{ background: isValidHex(input) ? normalizeHex(input) : base }} />
               </label>
               <div className="hex-field">
                 <label htmlFor="hex">HEX</label>
