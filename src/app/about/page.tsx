@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import SiteHeader from "@/components/site-header";
 
 export const metadata: Metadata = {
   title: "About",
@@ -12,13 +13,7 @@ export default function AboutPage() {
   return (
     <main className="app">
       <div className="shell info-page">
-        <header className="info-page-header">
-          <Link className="brand" href="/">
-            <span className="brand-mark" aria-hidden="true">✳</span>
-            <span>MyAwesomeTheme</span>
-          </Link>
-          <Link className="info-back-link" href="/">Back to color generator</Link>
-        </header>
+        <SiteHeader />
         <article className="info-article">
           <p className="info-eyebrow">ABOUT THE TOOL</p>
           <h1>Build a consistent color system, starting with one color.</h1>
