@@ -166,7 +166,7 @@ export default function Home() {
           <p className="helper-text">Your selected color is automatically placed at the closest shade level and marked “Selected”. Click any shade to copy its HEX value.</p>
         </section>
 
-        <ContrastChecker palette={palette} />
+        <section id="contrast-checker" className="workspace"><ContrastChecker palette={palette} /></section>
 
         <section className="workspace export-section" id="export">
           <div className="section-heading">
